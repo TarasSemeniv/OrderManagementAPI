@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagementAPI", "OrderManagementAPI\OrderManagementAPI.csproj", "{A11F3E55-7B5F-4554-AF00-A1222E35CAB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagementCore", "OrderManagementCore\OrderManagementCore.csproj", "{224A36EE-EF7F-46AB-8419-724D18F13BE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagementEntity", "OrderManagementEntity\OrderManagementEntity.csproj", "{80767596-907B-4098-94CB-64A3F9024C38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagementStorage", "OrderManagementStorage\OrderManagementStorage.csproj", "{8D8AE098-42B6-4BC3-94F7-12B731294BDF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A11F3E55-7B5F-4554-AF00-A1222E35CAB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A11F3E55-7B5F-4554-AF00-A1222E35CAB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A11F3E55-7B5F-4554-AF00-A1222E35CAB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A11F3E55-7B5F-4554-AF00-A1222E35CAB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{224A36EE-EF7F-46AB-8419-724D18F13BE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{224A36EE-EF7F-46AB-8419-724D18F13BE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{224A36EE-EF7F-46AB-8419-724D18F13BE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{224A36EE-EF7F-46AB-8419-724D18F13BE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80767596-907B-4098-94CB-64A3F9024C38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80767596-907B-4098-94CB-64A3F9024C38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80767596-907B-4098-94CB-64A3F9024C38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80767596-907B-4098-94CB-64A3F9024C38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D8AE098-42B6-4BC3-94F7-12B731294BDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D8AE098-42B6-4BC3-94F7-12B731294BDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D8AE098-42B6-4BC3-94F7-12B731294BDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D8AE098-42B6-4BC3-94F7-12B731294BDF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
