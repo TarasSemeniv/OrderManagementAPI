@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using OrderManagementCore.DTOs.Inputs;
 using OrderManagementCore.DTOs.Outputs;
 using OrderManagementCore.Interfaces;
@@ -8,59 +9,50 @@ using OrderManagementStorage;
 
 namespace OrderManagementCore.Services;
 
-public class OrderService(OrderContext context) : IOrderService
+public class OrderService(OrderContext context, IMapper mapper) : IOrderService
 {
     private readonly OrderContext _context = context;
-    public IEnumerable<OrderDto> GetOrders()
+    private readonly IMapper _mapper = mapper;
+    public async Task<IEnumerable<OrderDto>> GetOrdersAsync(int page, int pageSize, CancellationToken cancellationToken = default)
     {
-        return _context.Orders
-            .Include(o => o.Customer)
-            .Select(o => new OrderDto
-            {
-                Id = o.Id,
-                OrderDate = o.OrderDate,
-                TotalAmount = o.TotalAmount,
-                CustomerId = o.Customer.Id
-            });
+        if (page < 0)   
+            throw new ArgumentException("Page cannot be less than 0", nameof(page));
+        if (pageSize <= 0)
+            throw new ArgumentException("Page size cannot be less or equal 0", nameof(pageSize));
+        return await _context.Orders
+            .Select(o => _mapper.Map<OrderDto>(o))
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToArrayAsync(cancellationToken);
     }
 
-    public OrderDto GetOrderById(int id)
+    public async Task<OrderDto> GetOrderByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        var order = _context.Orders.Include(o => o.Customer).FirstOrDefault(o => o.Id == id);
+        var order = await _context.Orders
+            .FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
         if (order == null)
             throw new NullReferenceException("Order not found");
-        var orderDto = new OrderDto()
-        {
-            Id = order.Id,
-            OrderDate = order.OrderDate,
-            TotalAmount = order.TotalAmount,
-            CustomerId = order.Customer?.Id
-        };
-        return orderDto;
+        return _mapper.Map<OrderDto>(order);
     }
 
-    public OrderDto AddOrder(CreateOrderDto createOrderDto)
+    public async Task<OrderDto> AddOrderAsync(CreateOrderDto createOrderDto, CancellationToken cancellationToken = default)
     {
-        var order = new Order()
-        {
-            OrderDate = DateTime.Now,
-            TotalAmount = createOrderDto.TotalAmount, 
-        };
+        var order = _mapper.Map<Order>(createOrderDto);
         if (createOrderDto.CustomerId.HasValue)
-        {
-            order.Customer = _context.Customers.Find(createOrderDto.CustomerId);
-        }
+            order.Customer = await _context.Customers.FindAsync([createOrderDto.CustomerId], cancellationToken);
+        
+        ValidateOrder(order);
         
         _context.Orders.Add(order);
-        _context.SaveChanges();
-        var orderDto = new OrderDto()
-        {
-            Id = order.Id,
-            OrderDate = order.OrderDate,
-            TotalAmount = order.TotalAmount,
-            CustomerId = order.Customer?.Id 
-        };
-        
-        return orderDto;
+        await _context.SaveChangesAsync(cancellationToken);
+        return _mapper.Map<OrderDto>(order);
+    }
+
+    private void ValidateOrder(Order order)
+    {
+        if(order.TotalAmount < 0)
+            throw new ArgumentException("Order amount cannot be less to 0", nameof(order.TotalAmount));
+        if (order.OrderDate < DateTime.MinValue)
+            throw new ArgumentException("Order date cannot be less to DateTime.MinValue", nameof(order.OrderDate));
     }
 }

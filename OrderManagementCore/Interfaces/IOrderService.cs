@@ -6,7 +6,7 @@ namespace OrderManagementCore.Interfaces;
 
 public interface IOrderService
 {
-    IEnumerable<OrderDto> GetOrders();
-    OrderDto GetOrderById(int id);
-    OrderDto AddOrder(CreateOrderDto orderDto);
+    Task<IEnumerable<OrderDto>> GetOrdersAsync(int page, int pageSize, CancellationToken cancellationToken = default);
+    Task<OrderDto> GetOrderByIdAsync(int id, CancellationToken cancellationToken = default);
+    Task<OrderDto> AddOrderAsync(CreateOrderDto createOrderDto, CancellationToken cancellationToken = default);
 }

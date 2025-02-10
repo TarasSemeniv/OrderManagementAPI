@@ -12,21 +12,22 @@ public class OrderController(IOrderService orderService) : ControllerBase
     private readonly IOrderService _orderService = orderService;
 
     [HttpGet]
-    public ActionResult<IEnumerable<OrderDto>> GetAllOrders()
+    public async Task<ActionResult<IEnumerable<OrderDto>>> GetAllOrdersAsync([FromQuery]int page = 0,
+        [FromQuery]int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        return Ok(_orderService.GetOrders());
+        return Ok(await _orderService.GetOrdersAsync(page, pageSize, cancellationToken));
     }
 
     [HttpGet("{id}")]
-    public ActionResult<OrderDto> GetOrderById(int id)
+    public async Task<ActionResult<OrderDto>> GetOrderByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        return Ok(_orderService.GetOrderById(id));
+        return Ok(await _orderService.GetOrderByIdAsync(id, cancellationToken));
     }
 
     [HttpPost]
-    public ActionResult<OrderDto> CreateOrder(CreateOrderDto createOrderDto)
+    public async Task<ActionResult<OrderDto>> CreateOrderAsync(CreateOrderDto createOrderDto, CancellationToken cancellationToken = default)
     {
-        var taskDto = _orderService.AddOrder(createOrderDto);
+        var taskDto = await _orderService.AddOrderAsync(createOrderDto, cancellationToken);
         return Created("", taskDto);
     }
 }
