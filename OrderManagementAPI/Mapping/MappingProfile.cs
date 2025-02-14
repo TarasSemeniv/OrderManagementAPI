@@ -14,5 +14,6 @@ public class MappingProfile : Profile
             .ForMember(x => x.CustomerId, cgf => 
                 cgf.MapFrom(s => s.CustomerId))
             .ReverseMap();
+        CreateMap<RegisterCustomerDto, Customer>();
     }
 }
