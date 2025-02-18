@@ -1,3 +1,5 @@
+using OrderManagementEntity.Models;
+
 namespace OrderManagementCore.DTOs.Outputs;
 
 public class OrderDto
@@ -7,4 +9,5 @@ public class OrderDto
     
     public DateTime OrderDate { get; set; }
     public decimal TotalAmount { get; set; }
+    public Status? Status { get; set; }
 }

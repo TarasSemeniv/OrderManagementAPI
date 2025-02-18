@@ -48,6 +48,38 @@ public class OrderService(OrderContext context, IMapper mapper) : IOrderService
         return _mapper.Map<OrderDto>(order);
     }
 
+    public async Task<OrderDto> UpdateStatusForOrderAsync(Status status, int id, CancellationToken cancellationToken = default)
+    {
+        var updateOrder = _context.Orders.FirstOrDefault(o => o.Id == id);
+        if (updateOrder == null)
+            throw new NullReferenceException("Order not found");
+        updateOrder.Status = status;
+        await _context.SaveChangesAsync(cancellationToken);
+        return _mapper.Map<OrderDto>(updateOrder);
+    }
+
+    public async Task<OrderDto> UpdateOrderAsync(OrderDto order, CancellationToken cancellationToken = default)
+    {
+        var updateOrder = await _context.Orders.FirstOrDefaultAsync(o => o.Id == order.Id, cancellationToken);
+        if (updateOrder == null)
+            throw new NullReferenceException("Order not found");
+        updateOrder.Status = order.Status;
+        updateOrder.OrderDate = order.OrderDate;
+        updateOrder.TotalAmount = order.TotalAmount;
+        updateOrder.CustomerId = order.CustomerId;
+        await _context.SaveChangesAsync(cancellationToken);
+        return order;
+    }
+
+    public async Task DeleteOrderByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
+        if (order == null)
+            throw new NullReferenceException("Order not found");
+        _context.Orders.Remove(order);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
     private void ValidateOrder(Order order)
     {
         if(order.TotalAmount < 0)
